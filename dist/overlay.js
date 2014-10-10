@@ -7,8 +7,8 @@ define(function(require, exports, module){
     
     Overlay = Widget.extend({
         attrs : {
-            width : 0,
-            height : 0,
+            width : null,
+            height : null,
             zIndex : 99,
             visible : false
         },

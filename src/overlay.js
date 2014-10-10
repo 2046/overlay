@@ -6,8 +6,8 @@ Widget = require('widget');
 
 Overlay = Widget.extend({
     attrs : {
-        width : 0,
-        height : 0,
+        width : null,
+        height : null,
         zIndex : 99,
         visible : false
     },
