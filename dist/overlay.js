@@ -7,8 +7,8 @@ define(function(require, exports, module){
     
     Overlay = Widget.extend({
         attrs : {
-            width : null,
-            height : null,
+            width : 0,
+            height : 0,
             zIndex : 99,
             visible : false
         },
@@ -45,17 +45,6 @@ define(function(require, exports, module){
         },
         _onRenderVisible : function(val){
             this.element[val ? 'fadeIn' : 'fadeOut']();
-        },
-        _onRenderStyle : function(val){
-            for(var key in val){
-                if(val.hasOwnProperty(key)){
-                    if(key == 'element'){
-                        this.element.css(val[key]);
-                    }else{
-                        this.element.find(key).css(val[key]);
-                    }
-                }
-            }
         }
     });
     
