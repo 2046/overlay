@@ -21,7 +21,6 @@ define(function(require, exports, module){
                 height : 110,
                 zIndex : 90,
                 className : 'ui-overlay',
-                visible : false,
                 style : {
                     color : '#e80',
                     backgroundColor : 'green',
@@ -131,6 +130,148 @@ define(function(require, exports, module){
             $('body').click();
             expect(hide.callCount).to.be(1);
             overlay.get('trigger').off().remove();
+        });
+
+        it('hover event', function(done){
+            overlay.hide().destroy();
+
+            $('<div id="trigger1" class="trigger"></div><div id="element1"></div>').appendTo(document.body);
+
+            var event1, event2;
+            var showText = 'pop is shown';
+            var hideText = 'pop is hidden';
+
+            var testPopup2 = new Overlay({
+                trigger : '#trigger1',
+                element : '#element1',
+                triggerType : 'hover'
+            });
+            testPopup2.render();
+
+            testPopup2.on('shown', function(){
+                event1 = showText;
+            }).on('hidden', function(){
+                event2 = hideText;
+            });
+
+            testPopup2.trigger('shown');
+            testPopup2.trigger('hidden');
+            equals(event1, showText);
+            equals(event2, hideText);
+
+            $('#trigger1').mouseover();
+            setTimeout(function(){
+                expect(testPopup2.element.is(':visible')).to.be(true);
+                $('#trigger1').mouseout();
+
+                setTimeout(function(){
+                    expect(testPopup2.element.is(':visible')).to.be(false);
+                    done();
+                }, 900);
+            }, 80);
+        });
+
+        it('hover element make it visible', function(done){
+            overlay.hide().destroy();
+
+            $('<div id="trigger2" class="trigger"></div><div id="element2"></div>').appendTo(document.body);
+
+            var testPopup2 = new Overlay({
+                trigger : '#trigger2',
+                element : '#element2',
+                triggerType : 'hover'
+            });
+            testPopup2.render();
+
+            $('#trigger2').mouseover();
+            setTimeout(function(){
+                expect(testPopup2.element.is(':visible')).to.be(true);
+                $('#trigger2').mouseout();
+                $('#element2').mouseover();
+
+                setTimeout(function(){
+                    expect(testPopup2.element.is(':visible')).to.be(true);
+                    $('#element2').mouseout();
+
+                    setTimeout(function(){
+                        expect(testPopup2.element.is(':visible')).to.be(false);
+                        done();
+                    }, 900);
+                }, 80);
+            }, 80);
+        });
+
+        it('click event', function(done){
+            overlay.hide().destroy();
+
+            $('<div id="trigger3" class="trigger"></div><div id="element3"></div>').appendTo(document.body);
+
+            var testPopup2 = new Overlay({
+                trigger : '#trigger3',
+                element : '#element3',
+                triggerType : 'click'
+            });
+            testPopup2.render();
+            equals(testPopup2.element.is(':visible'), false);
+            $('#trigger3').click();
+            equals(testPopup2.element.is(':visible'), true);
+            $('#trigger3').click();
+            setTimeout(function(){
+                equals(testPopup2.element.is(':visible'), false);
+                done();
+            }, 900);
+        });
+
+        it('focus & blur event', function(done){
+            var input = $('<input type="text" id="input" />').appendTo(document.body);
+            $('<div id="element4"></div>').appendTo(document.body);
+
+            var testPopup2 = new Overlay({
+                trigger : '#input',
+                element : '#element4',
+                triggerType : 'focus'
+            });
+            testPopup2.render();
+            equals(testPopup2.element.is(':visible'), false);
+
+            window.focus();
+            input.focus();
+            setTimeout(function(){
+                equals(testPopup2.element.is(':visible'), true);
+
+                input.blur();
+                setTimeout(function(){
+                    equals(testPopup2.element.is(':visible'), false);
+                    input.remove();
+                    done();
+                }, 900);
+            }, 100);
+        });
+
+        it('blur when click element', function(done){
+            var input = $('<input type="text" id="input" />').appendTo(document.body);
+            $('<div id="element5"></div>').appendTo(document.body);
+
+            var testPopup2 = new Overlay({
+                trigger : '#input',
+                element : '#element5',
+                triggerType : 'focus'
+            });
+            testPopup2.render();
+            equals(testPopup2.element.is(':visible'), false);
+
+            window.focus();
+            input.focus();
+            setTimeout(function(){
+                equals(testPopup2.element.is(':visible'), true);
+                testPopup2.element.mousedown();
+
+                setTimeout(function(){
+                    equals(testPopup2.element.is(':visible'), true);
+                    input.remove();
+                    done();
+                }, 100);
+            }, 100);
         });
     });
 });

@@ -7,10 +7,27 @@ define(function(require, exports, module){
     
     Overlay = Widget.extend({
         attrs : {
+            delay : 100,
+            zIndex : 99,
             width : null,
             height : null,
-            zIndex : 99,
-            visible : false
+            trigger : null,
+            visible : false,
+            triggerType : null
+        },
+        init : function(){
+            var trigger, triggerType;
+    
+            trigger = this.get('trigger');
+            triggerType = this.get('triggerType');
+    
+            if(typeof trigger === 'string'){
+                this.set('trigger', trigger = $(trigger));
+            }
+    
+            if(triggerType){
+                this['_on' + capitalize(triggerType)](this);
+            }
         },
         show : function(){
             if(!this.rendered){
@@ -50,6 +67,55 @@ define(function(require, exports, module){
             }
     
             this.element[val ? 'fadeIn' : 'fadeOut']();
+        },
+        _onClick : function(ctx){
+            this.get('trigger').on('click', function(){
+                ctx[(ctx._activity = !ctx._activity) ? 'show' : 'hide']();
+            });
+        },
+        _onHover : function(ctx){
+            var timer;
+    
+            this.get('trigger').hover(function(){
+                clearTimeout(timer);
+                ctx.show();
+            }, function(){
+                mouseleave();
+            });
+    
+            ctx.delegateEvents({
+                'mouseenter' : function(){
+                    clearTimeout(timer);
+                },
+                'mouseleave' : function(){
+                    mouseleave();
+                }
+            });
+    
+            function mouseleave(){
+                timer = setTimeout(function(){
+                    ctx.hide();
+                }, ctx.get('delay'));
+            };
+        },
+        _onFocus : function(ctx){
+            this.get('trigger').on({
+                'focus' : function(){
+                    ctx.show();
+                },
+                'blur' : function(){
+                    setTimeout(function(){
+                        (!ctx._downOnElement) && ctx.hide();
+                        ctx._downOnElement = false;
+                    }, ctx.get('delay'));
+                }
+            });
+    
+            ctx.delegateEvents({
+                'mousedown' : function(){
+                    ctx._downOnElement = true;
+                }
+            });
         }
     });
     
@@ -84,6 +150,10 @@ define(function(require, exports, module){
                 return arr;
             }
         }
+    };
+    
+    function capitalize(val){
+        return val.charAt(0).toUpperCase() + val.slice(1);
     };
     
     module.exports = Overlay;
