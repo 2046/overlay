@@ -55,7 +55,7 @@ define(function(require, exports, module){
             overlay.hide().destroy();
             overlay = new Overlay().render();
             equals(overlay.element[0].className, '');
-            equals(overlay.element.height(), 0);
+            equals(overlay.element.width(), 0);
             equals(parseInt(overlay.element[0].style.zIndex), 99);
             equals(overlay.get('visible'), false);
             equals(overlay.get('style'), null);

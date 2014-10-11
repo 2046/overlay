@@ -44,6 +44,11 @@ define(function(require, exports, module){
             this.element.css('zIndex', val);
         },
         _onRenderVisible : function(val){
+            if(!this.rendered && !val){
+                this.element.hide();
+                return;
+            }
+    
             this.element[val ? 'fadeIn' : 'fadeOut']();
         }
     });
