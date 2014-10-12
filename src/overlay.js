@@ -14,7 +14,7 @@ Overlay = Widget.extend({
         visible : false,
         triggerType : null
     },
-    init : function(){
+    setup : function(){
         var trigger, triggerType;
 
         trigger = this.get('trigger');
@@ -130,7 +130,6 @@ $(document).on('click', function(e){
 
         for(index = 0, len = item._relativeElement.length; index < len; index++){
             el = $(item._relativeElement[index])[0];
-
             if(e.target === el || $.contains(el, e.target)){
                 return;
             }

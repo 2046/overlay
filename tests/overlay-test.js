@@ -105,7 +105,7 @@ define(function(require, exports, module){
                 attrs : {
                     trigger : null
                 },
-                init : function(){
+                setup : function(){
                     var that = this;
                     $(this.get('trigger')).click(function(){
                         that.show();
