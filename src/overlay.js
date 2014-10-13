@@ -21,7 +21,7 @@ Overlay = Widget.extend({
         triggerType = this.get('triggerType');
 
         if(typeof trigger === 'string'){
-            this.set('trigger', trigger = $(trigger));
+            this.set('trigger', $(trigger));
         }
 
         if(triggerType){
