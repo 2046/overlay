@@ -70,7 +70,7 @@ define(function(require, exports, module){
         },
         _onClick : function(ctx){
             this.get('trigger').on('click', function(){
-                ctx[(ctx._activity = !ctx._activity) ? 'show' : 'hide']();
+                ctx[!ctx.get('visible') ? 'show' : 'hide']();
             });
         },
         _onHover : function(ctx){
