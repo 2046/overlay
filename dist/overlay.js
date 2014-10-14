@@ -16,15 +16,9 @@ define(function(require, exports, module){
             triggerType : null
         },
         setup : function(){
-            var trigger, triggerType;
+            var triggerType = this.get('triggerType');
     
-            trigger = this.get('trigger');
-            triggerType = this.get('triggerType');
-    
-            if(typeof trigger === 'string'){
-                this.set('trigger', $(trigger));
-            }
-    
+            this.set('trigger', $(this.get('trigger')));
             if(triggerType){
                 this['_on' + capitalize(triggerType)](this);
             }
