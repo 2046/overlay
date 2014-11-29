@@ -28,10 +28,12 @@ Overlay = Widget.extend({
         }
 
         this.set('visible', true);
+        this.trigger('show');
         return this;
     },
     hide : function(){
         this.set('visible', false);
+        this.trigger('hide');
         return this;
     },
     destroy : function(){
